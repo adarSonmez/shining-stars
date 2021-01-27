@@ -1,2 +1,2 @@
 ## Shining Stars ✨✨
-Snowfall and shining stars effect made using HTML5 Canvas and JavaScript.
+Snowfall and shining stars effect using HTML5 Canvas and JavaScript.
