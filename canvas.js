@@ -2,13 +2,13 @@
 let canvas = document.getElementsByTagName('canvas')[0];
 let ctx = canvas.getContext('2d');
 
-canvas.width = window.innerWidth - 1;
-canvas.height = window.innerHeight - 1;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 // initial values
 const numberOfBalls = 500;
 let gravity = 0.005;
-let friction = 0.98;
+let rebound = 0.98;
 let floorCount = 0;
 let maxRadius = 20;
 
@@ -37,7 +37,7 @@ function randomIntRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-// construction function (you can use class instead)
+// constructor function (you can also use class instead)
 function Ball(x, y, dx, dy, radius, color) {
     this.x = x;
     this.y = y;
@@ -47,7 +47,7 @@ function Ball(x, y, dx, dy, radius, color) {
     this.color = color;
 
     // draw items
-    this.draw = function () {
+    this.draw = () => {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         ctx.stroke();
@@ -57,9 +57,9 @@ function Ball(x, y, dx, dy, radius, color) {
     };
 
     // move items
-    this.update = function () {
+    this.update = () => {
         if (this.y + this.radius + this.dy > canvas.height) {
-            this.dy = -this.dy * friction;
+            this.dy = -this.dy * rebound;
             floorCount++;
         } else {
             this.dy += gravity;
@@ -73,7 +73,7 @@ function Ball(x, y, dx, dy, radius, color) {
         this.y += this.dy;
 
         // increase radius
-        if (this.radius < maxRadius && floorCount > 498) {
+        if (this.radius < maxRadius && floorCount > numberOfBalls - 2) {
             this.radius = this.radius * 1.005;
         }
 
@@ -91,7 +91,7 @@ function Ball(x, y, dx, dy, radius, color) {
 
             if (this.y - this.radius + this.dy < 0) {
                 this.dy = -this.dy;
-                friction = 1;
+                rebound = 1;
                 gravity = 0;
             }
 
@@ -118,6 +118,7 @@ function init() {
         // push each item to the array to animate them later
         ballArray.push(new Ball(x, y, dx, 2, radius, 'white'))
     }
+    animate();
 }
 
 // loop for animation
@@ -131,4 +132,3 @@ function animate() {
 }
 
 init();
-animate();
